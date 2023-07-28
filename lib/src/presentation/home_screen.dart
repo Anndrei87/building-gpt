@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../core/constants/constants.dart';
+import '../core/services/service_bottom_modal.dart';
 import '../core/widgets/chat_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,12 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await showModal(_);
+            },
             icon: const Icon(
               Icons.more_vert_rounded,
               color: Colors.white,
@@ -55,11 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: 6,
                 itemBuilder: (_, index) {
                   return ChatWidget(
-                    message: ConstantsAplication.chatMessages[index]['msg']
-                        .toString(),
+                    message: chatMessages[index]['msg'].toString(),
                     chatIndex: int.parse(
-                      ConstantsAplication.chatMessages[index]['chatIndex']
-                          .toString(),
+                      chatMessages[index]['chatIndex'].toString(),
                     ),
                   );
                 },
@@ -72,9 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 15),
               Material(
-                color: ConstantsAplication.cardColor,
+                color: cardColor,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
                       Expanded(
