@@ -18,9 +18,7 @@ class ChatWidget extends StatelessWidget {
     return Column(
       children: [
         Material(
-          color: chatIndex == 0
-              ? ConstantsAplication.scaffoldbackground
-              : ConstantsAplication.cardColor,
+          color: chatIndex == 0 ? scaffoldbackground : cardColor,
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
