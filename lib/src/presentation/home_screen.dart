@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../core/constants/constants.dart';
-import '../core/services/service_bottom_modal.dart';
+import '../core/widgets/bottom_modal.dart';
 import '../core/widgets/chat_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () async {},
                         icon: const Icon(
                           Icons.send,
                           color: Colors.white,
