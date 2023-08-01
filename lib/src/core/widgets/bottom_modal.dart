@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../constants/constants.dart';
-import '../widgets/drop_down.dart';
-import '../widgets/text_custom.dart';
+import 'drop_down.dart';
+import 'text_custom.dart';
 
 Future<dynamic> showModal(BuildContext _) {
   return showModalBottomSheet(
@@ -21,7 +21,7 @@ Future<dynamic> showModal(BuildContext _) {
           children: [
             Flexible(
               child: TextWidget(
-                label: 'Escolha o modelo:',
+                label: 'Chosen model:',
                 fontSize: 16,
               ),
             ),
