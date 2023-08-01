@@ -62,15 +62,3 @@ class _DropDownModelsWidgetState extends State<DropDownModelsWidget> {
     );
   }
 }
-
-// DropdownButton(
-//       dropdownColor: scaffoldbackground,
-//       iconEnabledColor: Colors.white,
-//       items: getModelsItem,
-//       value: currentModel,
-//       onChanged: (value) {
-//         setState(() {
-//           currentModel = value.toString();
-//         });
-//       },
-//     );
