@@ -69,7 +69,7 @@ class ApiService {
             responseChat.length,
             (index) {
               return ChatModel(
-                msg: responseChat[index]['text'].toString(),
+                msg: (responseChat[index] as Map)['text'].toString(),
                 chatIndex: 1,
               );
             },

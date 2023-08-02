@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 import '../core/constants/constants.dart';
+import '../core/models/chat_model.dart';
 import '../core/providers/models.provider.dart';
 import '../core/services/api_service.dart';
 import '../core/widgets/bottom_modal.dart';
@@ -17,23 +18,31 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var _isTyping = false;
-  TextEditingController? textEditController;
+  late TextEditingController textEditController;
+  var listChat = <ChatModel>[];
+  late FocusNode _focusNode;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     textEditController = TextEditingController();
+    _focusNode = FocusNode();
+    _scrollController = ScrollController();
     super.initState();
   }
 
   @override
   void dispose() {
-    textEditController!.dispose();
+    textEditController.dispose();
+    _focusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext _) {
     final modelsProvider = Provider.of<ModelsProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -59,13 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Flexible(
               child: ListView.builder(
-                itemCount: 6,
+                controller: _scrollController,
+                itemCount: listChat.length,
                 itemBuilder: (_, index) {
                   return ChatWidget(
-                    message: chatMessages[index]['msg'].toString(),
-                    chatIndex: int.parse(
-                      chatMessages[index]['chatIndex'].toString(),
-                    ),
+                    message: listChat[index].msg,
+                    chatIndex: listChat[index].chatIndex,
                   );
                 },
               ),
@@ -85,8 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Expanded(
                       child: TextField(
+                        focusNode: _focusNode,
                         controller: textEditController,
-                        onSubmitted: (value) {},
+                        onSubmitted: (value) async {
+                          await sendMessage(modelsProvider: modelsProvider);
+                        },
+                        onChanged: (value) => debugPrint(value),
                         decoration: const InputDecoration.collapsed(
                           hintText: 'Como posso te ajudar',
                           hintStyle: TextStyle(color: Colors.grey),
@@ -95,22 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        setState(() {
-                          _isTyping = true;
-                        });
-                        try {
-                          final list = await ApiService().sendMessage(
-                            msg: textEditController!.text,
-                            modelId: modelsProvider.currentModel,
-                          );
-                          debugPrint(list[0].msg);
-                        } catch (e) {
-                          // print(e.toString());
-                        } finally {
-                          setState(() {
-                            _isTyping = false;
-                          });
-                        }
+                        await sendMessage(modelsProvider: modelsProvider);
                       },
                       icon: const Icon(
                         Icons.send,
@@ -125,5 +122,38 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void scrollListToEnd() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  Future<void> sendMessage({required ModelsProvider modelsProvider}) async {
+    setState(() {
+      _isTyping = true;
+      listChat.add(ChatModel(msg: textEditController.text, chatIndex: 0));
+      _focusNode.unfocus();
+    });
+    try {
+      listChat.addAll(
+        await ApiService().sendMessage(
+          msg: textEditController.text,
+          modelId: modelsProvider.currentModel,
+        ),
+      );
+      setState(() {});
+    } catch (e) {
+      // print(e.toString());
+    } finally {
+      setState(() {
+        textEditController.clear();
+        scrollListToEnd();
+        _isTyping = false;
+      });
+    }
   }
 }
