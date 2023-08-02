@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/constants.dart';
-import '../models/modelsmodel.dart';
+import '../models/models_model.dart';
+import '../providers/models.provider.dart';
 import '../services/api_service.dart';
 import 'text_custom.dart';
 
@@ -14,12 +16,14 @@ class DropDownModelsWidget extends StatefulWidget {
 }
 
 class _DropDownModelsWidgetState extends State<DropDownModelsWidget> {
+  String? currentModel;
   final apiService = ApiService();
   @override
   Widget build(BuildContext context) {
-    var currentModel = 'text-davinci-edit-001';
+    final modelsProvider = Provider.of<ModelsProvider>(context, listen: false);
+    currentModel = modelsProvider.getCurrentModel;
     return FutureBuilder<List<ModelsModel>>(
-      future: apiService.getModels(),
+      future: modelsProvider.getAllModels(),
       builder: (_, snapshot) {
         if (snapshot.hasError) {
           return Center(
@@ -47,6 +51,7 @@ class _DropDownModelsWidgetState extends State<DropDownModelsWidget> {
                     onChanged: (value) {
                       setState(() {
                         currentModel = value.toString();
+                        modelsProvider.setCurrentModel(value.toString());
                       });
                     },
                   ),
