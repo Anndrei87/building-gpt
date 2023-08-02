@@ -8,8 +8,8 @@ import '../models/chat_model.dart';
 import '../models/models_model.dart';
 
 class ApiService {
+  final dio = Dio();
   Future<List<ModelsModel>> getModels() async {
-    final dio = Dio();
     final options = Options(
       validateStatus: (status) => true,
       headers: {'Authorization': 'Bearer $apiKey'},
@@ -41,7 +41,6 @@ class ApiService {
     required String msg,
     required String modelId,
   }) async {
-    final dio = Dio();
     final options = Options(
       validateStatus: (status) => true,
       contentType: Headers.jsonContentType,
@@ -50,7 +49,7 @@ class ApiService {
 
     try {
       final response = await dio.post<Map<String, dynamic>>(
-        '$baseUrl/completions',
+        '$baseUrl/chat/completions',
         data: jsonEncode(
           {
             'model': modelId,
@@ -70,6 +69,56 @@ class ApiService {
             (index) {
               return ChatModel(
                 msg: (responseChat[index] as Map)['text'].toString(),
+                chatIndex: 1,
+              );
+            },
+          );
+        }
+      }
+
+      return list;
+    } catch (e) {
+      HttpException(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<List<ChatModel>> sendMessageGPT({
+    required String msg,
+    required String modelId,
+  }) async {
+    final options = Options(
+      validateStatus: (status) => true,
+      contentType: Headers.jsonContentType,
+      headers: {'Authorization': 'Bearer $apiKey'},
+    );
+
+    try {
+      final response = await dio.post<Map<String, dynamic>>(
+        '$baseUrl/chat/completions',
+        data: jsonEncode(
+          {
+            'model': modelId,
+            'messages': [
+              {
+                'role': 'user',
+                'content': msg,
+              }
+            ]
+          },
+        ),
+        options: options,
+      );
+      var list = <ChatModel>[];
+      final responseChat = response.data!['choices'] as List;
+      if (response.statusCode == 200) {
+        if (responseChat.isNotEmpty) {
+          list = List<ChatModel>.generate(
+            responseChat.length,
+            (index) {
+              return ChatModel(
+                msg: ((responseChat[index] as Map)['message'] as Map)['content']
+                    .toString(),
                 chatIndex: 1,
               );
             },
