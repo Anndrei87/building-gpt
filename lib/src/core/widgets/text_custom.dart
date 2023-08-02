@@ -15,12 +15,15 @@ class TextWidget extends StatelessWidget {
   final FontWeight? fontWeight;
   @override
   Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: TextStyle(
-        color: color ?? Colors.white,
-        fontSize: fontSize,
-        fontWeight: fontWeight ?? FontWeight.w500,
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: color ?? Colors.white,
+          fontSize: fontSize,
+          fontWeight: fontWeight ?? FontWeight.w500,
+        ),
       ),
     );
   }

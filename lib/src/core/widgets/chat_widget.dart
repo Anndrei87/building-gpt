@@ -37,18 +37,22 @@ class ChatWidget extends StatelessWidget {
                   child: chatIndex == 0
                       ? TextWidget(label: message)
                       : DefaultTextStyle(
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
-                          child: AnimatedTextKit(
-                            isRepeatingAnimation: false,
-                            displayFullTextOnTap: true,
-                            totalRepeatCount: 1,
-                            animatedTexts: [
-                              TyperAnimatedText(message.trim()),
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: AnimatedTextKit(
+                              isRepeatingAnimation: false,
+                              displayFullTextOnTap: true,
+                              totalRepeatCount: 1,
+                              animatedTexts: [
+                                TyperAnimatedText(message.trim()),
+                              ],
+                            ),
                           ),
                         ),
                 ),
