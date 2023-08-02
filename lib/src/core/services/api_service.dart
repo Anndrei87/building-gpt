@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 
 import '../constants/api_constants.dart';
-import '../models/modelsmodel.dart';
+import '../models/chat_model.dart';
+import '../models/models_model.dart';
 
 class ApiService {
   Future<List<ModelsModel>> getModels() async {
@@ -26,6 +28,53 @@ class ApiService {
             .toList();
       } else {
         throw HttpException(response.statusMessage.toString());
+      }
+
+      return list;
+    } catch (e) {
+      HttpException(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<List<ChatModel>> sendMessage({
+    required String msg,
+    required String modelId,
+  }) async {
+    final dio = Dio();
+    final options = Options(
+      validateStatus: (status) => true,
+      contentType: Headers.jsonContentType,
+      headers: {'Authorization': 'Bearer $apiKey'},
+    );
+
+    try {
+      final response = await dio.post<Map<String, dynamic>>(
+        '$baseUrl/completions',
+        data: jsonEncode(
+          {
+            'model': modelId,
+            'prompt': msg,
+            'max_tokens': 100,
+          },
+        ),
+        options: options,
+      );
+      var list = <ChatModel>[];
+      final responseChat = response.data!['choices'] as List;
+      if (response.statusCode == 200) {
+        // (response.data['error'] as Map<String,dynamic)
+        if (responseChat.isNotEmpty) {
+          list = List<ChatModel>.generate(
+            responseChat.length,
+            (index) {
+              return ChatModel(
+                msg: responseChat[index]['text'].toString(),
+                chatIndex: 1,
+              );
+            },
+          );
+        }
       }
 
       return list;

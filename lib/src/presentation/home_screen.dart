@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 import '../core/constants/constants.dart';
+import '../core/providers/models.provider.dart';
+import '../core/services/api_service.dart';
 import '../core/widgets/bottom_modal.dart';
 import '../core/widgets/chat_widget.dart';
 
@@ -13,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _isTyping = true;
+  var _isTyping = false;
   TextEditingController? textEditController;
 
   @override
@@ -30,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext _) {
+    final modelsProvider = Provider.of<ModelsProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -71,35 +75,52 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.white,
                 size: 18,
               ),
-              const SizedBox(height: 15),
-              Material(
-                color: cardColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: textEditController,
-                          onSubmitted: (value) {},
-                          decoration: const InputDecoration.collapsed(
-                            hintText: 'Como posso te ajudar',
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
+            ],
+            const SizedBox(height: 15),
+            Material(
+              color: cardColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: textEditController,
+                        onSubmitted: (value) {},
+                        decoration: const InputDecoration.collapsed(
+                          hintText: 'Como posso te ajudar',
+                          hintStyle: TextStyle(color: Colors.grey),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () async {},
-                        icon: const Icon(
-                          Icons.send,
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        setState(() {
+                          _isTyping = true;
+                        });
+                        try {
+                          final list = await ApiService().sendMessage(
+                            msg: textEditController!.text,
+                            modelId: modelsProvider.currentModel,
+                          );
+                          debugPrint(list[0].msg);
+                        } catch (e) {
+                          // print(e.toString());
+                        } finally {
+                          setState(() {
+                            _isTyping = false;
+                          });
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ]
+              ),
+            )
           ],
         ),
       ),
