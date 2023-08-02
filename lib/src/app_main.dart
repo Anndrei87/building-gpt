@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/constants.dart';
-import 'core/providers/models.provider.dart';
+import 'core/providers/chat_provider.dart';
+import 'core/providers/models_provider.dart';
 import 'presentation/home_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -15,6 +16,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ModelsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(),
         ),
       ],
       child: MaterialApp(

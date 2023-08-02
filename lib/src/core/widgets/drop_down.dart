@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/constants.dart';
 import '../models/models_model.dart';
-import '../providers/models.provider.dart';
+import '../providers/models_provider.dart';
 import '../services/api_service.dart';
 import 'text_custom.dart';
 

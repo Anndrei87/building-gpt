@@ -6,7 +6,7 @@ import '../services/api_service.dart';
 class ModelsProvider with ChangeNotifier {
   final apiService = ApiService();
   List<ModelsModel> modelsList = [];
-  String currentModel = 'text-davinci-003';
+  String currentModel = 'gpt-3.5-turbo';
   List<ModelsModel> get getModelsList {
     return modelsList;
   }
