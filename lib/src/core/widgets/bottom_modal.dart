@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../constants/constants.dart';
 import 'drop_down.dart';
 import 'text_custom.dart';
@@ -14,18 +14,18 @@ Future<dynamic> showModal(BuildContext _) {
     backgroundColor: scaffoldbackground,
     context: _,
     builder: (_) {
-      return const Padding(
-        padding: EdgeInsets.all(18),
+      return Padding(
+        padding: const EdgeInsets.all(18),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
               child: TextWidget(
-                label: 'Chosen model:',
+                label: AppLocalizations.of(_)!.chooseModel,
                 fontSize: 15,
               ),
             ),
-            Flexible(
+            const Flexible(
               flex: 2,
               child: DropDownModelsWidget(),
             )
