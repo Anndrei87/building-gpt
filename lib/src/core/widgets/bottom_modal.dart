@@ -22,10 +22,11 @@ Future<dynamic> showModal(BuildContext _) {
             Flexible(
               child: TextWidget(
                 label: 'Chosen model:',
-                fontSize: 16,
+                fontSize: 15,
               ),
             ),
             Flexible(
+              flex: 2,
               child: DropDownModelsWidget(),
             )
           ],
