@@ -1,0 +1,26 @@
+{
+    "language": "English",
+    "@language":{
+        "description": "The current language"
+    },
+    "chooseLanguage": "Choose language",
+    "@chooseLanguage":{
+        "description": "Choose language"
+    },
+    "chooseModel": "Chosen model:",
+    "@chooseModel":{
+        "description": "Label chosen model"
+    },
+    "howHelpYou": "How can help you ?",
+    "@howHelpYou":{
+        "description": "Label input"
+    },
+    "pleaseTypeMessage": "Please type a message",
+    "@pleaseTypeMessage":{
+        "description": "Label please type a message"
+    },
+    "multipleMessage": "You cant send multiple messages at a time",
+    "@multipleMessage":{
+        "description": "Label you cant send multiple messages at a time"
+    }
+}

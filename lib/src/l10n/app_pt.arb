@@ -1,0 +1,26 @@
+{
+    "language": "Portugues",
+    "@language":{
+        "description": "Lingua atual"
+    },
+    "chooseLanguage": "Alterar idioma",
+    "@chooseLanguage":{
+        "description": "Alterar idioma"
+    },
+    "chooseModel": "Defina model:",
+    "@chooseModel":{
+        "description": "Label escolha o modelo"
+    },
+    "howHelpYou": "Como posso te ajudar ?",
+    "@howHelpYou":{
+        "description": "Label como posso te ajudar"
+    },
+    "pleaseTypeMessage": "Digite alguma mensagem",
+    "@pleaseTypeMessage":{
+        "description": "Label digite alguma mensage"
+    },
+    "multipleMessage": "Você não pode mandar multiplas mensagens",
+    "@multipleMessage":{
+        "description": "Label você não pode mandar multiplas mensagens"
+    }
+}
