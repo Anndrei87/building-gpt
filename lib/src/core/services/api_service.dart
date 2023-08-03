@@ -49,7 +49,7 @@ class ApiService {
 
     try {
       final response = await dio.post<Map<String, dynamic>>(
-        '$baseUrl/chat/completions',
+        '$baseUrl/completions',
         data: jsonEncode(
           {
             'model': modelId,
@@ -60,19 +60,11 @@ class ApiService {
         options: options,
       );
       var list = <ChatModel>[];
+
       final responseChat = response.data!['choices'] as List;
       if (response.statusCode == 200) {
-        // (response.data['error'] as Map<String,dynamic)
         if (responseChat.isNotEmpty) {
-          list = List<ChatModel>.generate(
-            responseChat.length,
-            (index) {
-              return ChatModel(
-                msg: (responseChat[index] as Map)['text'].toString(),
-                chatIndex: 1,
-              );
-            },
-          );
+          list = ChatModel.createListChat(responseChat, isRealGPT: false);
         }
       }
 
@@ -113,16 +105,7 @@ class ApiService {
       final responseChat = response.data!['choices'] as List;
       if (response.statusCode == 200) {
         if (responseChat.isNotEmpty) {
-          list = List<ChatModel>.generate(
-            responseChat.length,
-            (index) {
-              return ChatModel(
-                msg: ((responseChat[index] as Map)['message'] as Map)['content']
-                    .toString(),
-                chatIndex: 1,
-              );
-            },
-          );
+          list = ChatModel.createListChat(responseChat, isRealGPT: true);
         }
       }
 
