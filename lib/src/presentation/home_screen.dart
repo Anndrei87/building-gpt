@@ -9,6 +9,7 @@ import '../core/providers/localization_provider.dart';
 import '../core/providers/models_provider.dart';
 import '../core/widgets/bottom_modal.dart';
 import '../core/widgets/chat_widget.dart';
+import '../core/widgets/drawer_custom.dart';
 import '../core/widgets/text_custom.dart';
 
 enum LocaleEnum { pt, en }
@@ -25,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController textEditController;
   late FocusNode _focusNode;
   late ScrollController _scrollController;
-  LocaleEnum? _character = LocaleEnum.pt;
 
   @override
   void initState() {
@@ -75,66 +75,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         title: const Text('ChatGPT'),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: scaffoldbackground,
-              ),
-              child: Column(
-                children: [
-                  Image.asset(
-                    'assets/openai_logo.jpg',
-                    width: 50,
-                    height: 50,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    AppLocalizations.of(context)!.chooseLanguage,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                RadioListTile<LocaleEnum>(
-                  title: const Text('Portugues-BR'),
-                  value: LocaleEnum.pt,
-                  groupValue: _character,
-                  onChanged: (value) {
-                    setState(() {
-                      setLocale(
-                        const Locale.fromSubtags(languageCode: 'pt'),
-                        localizationProvider,
-                      );
-                      _character = value;
-                    });
-                  },
-                ),
-                RadioListTile<LocaleEnum>(
-                  title: const Text('Inglês'),
-                  value: LocaleEnum.en,
-                  groupValue: _character,
-                  onChanged: (value) {
-                    setState(() {
-                      setLocale(
-                        const Locale.fromSubtags(languageCode: 'en'),
-                        localizationProvider,
-                      );
-                      _character = value;
-                    });
-                  },
-                ),
-              ],
-            )
-          ],
-        ),
+      drawer: DrawerCustom(
+        provider: localizationProvider,
+        localizationProvider: localizationProvider.getEnum,
+        setLocalePt: () {
+          setLocale(
+            const Locale.fromSubtags(languageCode: 'pt'),
+            localizationProvider,
+          );
+        },
+        setLocaleEn: () {
+          setLocale(
+            const Locale.fromSubtags(languageCode: 'en'),
+            localizationProvider,
+          );
+        },
       ),
       body: SafeArea(
         child: Column(
